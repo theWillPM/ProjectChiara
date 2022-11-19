@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import entity.Player;
+
 import javax.swing.JPanel;
+
+import entity.Player;
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -14,23 +17,25 @@ public class GamePanel extends JPanel implements Runnable{
 
     public final int tileSize = originalTileSize * scale;
 
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 9;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 9;
 
-    final int screenWidth = tileSize * maxScreenCol; //1024
-    final int screenHeight = tileSize * maxScreenRow; //576
+    public final int screenWidth = tileSize * maxScreenCol; //1024
+    public final int screenHeight = tileSize * maxScreenRow; //576
 
     //FPS
     int FPS = 60;
 
+    TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; //Starts the 'game clock' - required: implements Runnable
     Player player = new Player(this,keyH);
 
-    //Set player default stats
-    int playerX = player.x;
-    int playerY = player.y;
-    int playerSpeed = player.speed;
+/* This was used in the beggining, to set those without proper function calls in Player class.     
+//Set player default stats
+        int playerX = player.x;
+        int playerY = player.y;
+        int playerSpeed = player.speed; */
 
     public GamePanel() { 
         //GamePanel constructor with size, background color and double buffer.    
@@ -90,7 +95,8 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g; //this has a little more functions so I'm going to convert graphics g into a Graphics2D
-
+        
+        tileM.draw(g2);
         player.draw(g2);
         g2.dispose();
     

@@ -14,7 +14,7 @@ public class Player extends Entity{
     
     GamePanel gp;
     KeyHandler keyH;
-    File f1 = new File("./../src/res/character_models/Chiara_back_walk.gif");
+    File f1 = new File("./../src/res/character_models/back1.png");
     File f2 = new File("./../src/res/character_models/back2.png");
     File f3 = new File("./../src/res/character_models/back3.png");
     File f4 = new File("./../src/res/character_models/back4.png");
@@ -30,6 +30,7 @@ public class Player extends Entity{
     File f14 = new File("./../src/res/character_models/right2.png");
     File f15 = new File("./../src/res/character_models/right3.png");
     File f16 = new File("./../src/res/character_models/right4.png");
+    File f17 = new File("./../src/res/character_models/shadow.png");
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -48,7 +49,7 @@ public class Player extends Entity{
 
     public void getPlayerImage() {
         try {
-            System.out.println("Image loading started");
+            // System.out.println("Image loading started");
             up1 = ImageIO.read(f1);
             up2 = ImageIO.read(f2);
             up3 = ImageIO.read(f3);
@@ -65,49 +66,121 @@ public class Player extends Entity{
             right2 = ImageIO.read(f14);
             right3 = ImageIO.read(f15);
             right4 = ImageIO.read(f16);
-            System.out.println("Image loading ended");
+            shadow = ImageIO.read(f17);
+            // System.out.println("Image loading ended");
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
     public void update() {
-        if(keyH.upPressed) {
-            direction = "up";
-            y -= speed;
-        } else if (keyH.downPressed) {
-            direction = "down";
-            y += speed;
-        } else if (keyH.leftPressed) {
-            direction = "left";
-            x -= speed;
-        } else if (keyH.rightPressed) {
-            direction = "right";
-            x += speed;
+
+        if(keyH.upPressed || keyH.downPressed ||
+         keyH.leftPressed || keyH.rightPressed) {
+
+            if(keyH.upPressed) {
+                direction = "up";
+                y -= speed;
+            } else if (keyH.downPressed) {
+                direction = "down";
+                y += speed;
+            } else if (keyH.leftPressed) {
+                direction = "left";
+                x -= speed;
+            } else if (keyH.rightPressed) {
+                direction = "right";
+                x += speed;
+            }
+    
+            spriteCounter ++;
+            //Changes player sprite every 9 frames. (150ms)
+            if(spriteCounter > 9) {
+                if(spriteNum == 1) {
+                    spriteNum = 2;
+                }
+                else if (spriteNum == 2) {
+                    spriteNum = 3;
+                }
+                else if (spriteNum == 3) {
+                    spriteNum = 4;
+                }
+                else if (spriteNum == 4) {
+                    if (direction == "up") {
+                        spriteNum = 5;
+                    } else {
+                    spriteNum = 1;
+                    }
+                }
+                else if (spriteNum == 5) {
+                    if (direction == "up") {
+                        spriteNum = 6;
+                    } else {
+                    spriteNum = 1;
+                    }
+                }
+                else if (spriteNum == 6) {                
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
         }
+
     }
 
     public void draw(Graphics2D g2) {
         // g2.setColor(Color.white);
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize); //display test
-
+    
         BufferedImage image = null;
 
         switch(direction) {
             case "up":
-            image = up1;
+                if(spriteNum == 1) 
+                image = up1;
+                if(spriteNum == 2) 
+                image = up2;
+                if(spriteNum == 3) 
+                image = up3;
+                if(spriteNum == 4) 
+                image = up4;
+                if(spriteNum == 5) 
+                image = up5;
+                if(spriteNum == 6) 
+                image = up6;
             break;
             case "down":
-            image = down1;
+                if(spriteNum == 1) 
+                image = down1;
+                if(spriteNum == 2) 
+                image = down2;
+                if(spriteNum == 3) 
+                image = down1;
+                if(spriteNum == 4) 
+                image = down2;
             break;
             case "left":
-            image = left1;
+                if(spriteNum == 1) 
+                image = left1;
+                if(spriteNum == 2) 
+                image = left2;
+                if(spriteNum == 3) 
+                image = left3;
+                if(spriteNum == 4) 
+                image = left4;
             break;
             case "right":
-            image = right1;
+                if(spriteNum == 1) 
+                image = right1;
+                if(spriteNum == 2) 
+                image = right2;
+                if(spriteNum == 3) 
+                image = right3;
+                if(spriteNum == 4) 
+                image = right4;
             break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(shadow, x, y+2, gp.tileSize*2, gp.tileSize*2, null);
+        g2.drawImage(image, x, y, gp.tileSize*2, gp.tileSize*2, null);
         
     }
 }
