@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public final int tileSize = originalTileSize * scale;
 
-    public final int maxScreenCol = 29;
+    public final int maxScreenCol = 24;
     public final int maxScreenRow = 12;
 
     public final int screenWidth = tileSize * maxScreenCol; //(30 = 1920) (16 = 1024)
@@ -86,11 +86,12 @@ public class GamePanel extends JPanel implements Runnable{
         
 }
 
-    public void update() {
-        player.update();        
-    }
+public void update() {
+    player.update();
+    // TileManager.update();        
+}
 
-    public void paintComponent(Graphics g) { //Graphics is simpler
+public void paintComponent(Graphics g) { //Graphics is simpler
 
         super.paintComponent(g);
 
@@ -99,7 +100,7 @@ public class GamePanel extends JPanel implements Runnable{
         tileM.draw(g2);
         player.draw(g2);
         g2.dispose();
-    
+        
     }
-
+    
 }
